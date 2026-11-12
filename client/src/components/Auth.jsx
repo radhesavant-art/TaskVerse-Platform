@@ -1,4 +1,7 @@
+
 import React, { useState } from 'react';
+
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
 const Auth = ({ onLoginSuccess }) => {
   const [isLogin, setIsLogin] = useState(true);
@@ -19,8 +22,8 @@ const Auth = ({ onLoginSuccess }) => {
     }
 
     const endpoint = isLogin
-      ? 'http://localhost:5000/api/auth/login'
-      : 'http://localhost:5000/api/auth/register';
+      ? `${API_URL}/api/auth/login`
+      : `${API_URL}/api/auth/register`;
     const payload = isLogin ? { email, password } : { name, email, password };
 
     try {

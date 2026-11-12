@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import io from 'socket.io-client';
 
-const socket = io('http://localhost:5000');
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+const socket = io(API_URL);
 
 const DashboardLayout = ({ user, onLogout }) => {
   const [activeTab, setActiveTab] = useState('tasks');
@@ -31,8 +32,7 @@ const DashboardLayout = ({ user, onLogout }) => {
     }
   }, [activeTab]);
 
-  
-useEffect(() => {
+  useEffect(() => {
     socket.emit('join_room', room);
 
     const handleReceiveMessage = (data) => {
@@ -50,7 +50,7 @@ useEffect(() => {
     };
   }, [room, user]);
 
-const sendMessage = async (e) => {
+  const sendMessage = async (e) => {
     e.preventDefault();
     if (currentMessage.trim() !== '') {
       const messageData = {
@@ -73,7 +73,7 @@ const sendMessage = async (e) => {
 
   const fetchTribes = async () => {
     try {
-      const res = await fetch('http://localhost:5000/api/tribes');
+      const res = await fetch(`${API_URL}/api/tribes`);
       const data = await res.json();
       setTribes(data);
     } catch (err) {
@@ -84,7 +84,7 @@ const sendMessage = async (e) => {
   const handleCreateTribe = async (e) => {
     e.preventDefault();
     try {
-      const res = await fetch('http://localhost:5000/api/tribes/create', {
+      const res = await fetch(`${API_URL}/api/tribes/create`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name: newTribeName, description: newTribeDesc, category: newTribeCategory })
@@ -110,7 +110,7 @@ const sendMessage = async (e) => {
     }
 
     try {
-      const res = await fetch(`http://localhost:5000/api/auth/update/${userId}`, {
+      const res = await fetch(`${API_URL}/api/auth/update/${userId}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name: profileName, email: profileEmail })
