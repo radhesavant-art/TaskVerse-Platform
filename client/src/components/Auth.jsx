@@ -26,6 +26,8 @@ const Auth = ({ onLoginSuccess }) => {
       : `${API_URL}/api/auth/register`;
     const payload = isLogin ? { email, password } : { name, email, password };
 
+    console.log("Hitting endpoint:", endpoint);
+
     try {
       const response = await fetch(endpoint, {
         method: 'POST',
